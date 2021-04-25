@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  mysql:
+    image: "mysql:8"
+    environment:
+      MYSQL_DATABASE: allegro
+      MYSQL_ROOT_PASSWORD:
+  backend:
+    image: "spring-allegro"
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/allegro?useUnicode=yes&characterEncoding=UTF-8&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=CET&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME:
+      SPRING_DATASOURCE_PASSWORD:
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    restart: on-failure
+    ports:
+      - "8080:8080"
+  frontend:
+    image: "angular-allegro"
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
